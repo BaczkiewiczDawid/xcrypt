@@ -6,27 +6,6 @@ import {dataFormatter} from "@/helpers/data-formatter";
 import {useEffect, useState} from "react";
 
 export const CryptoListView = () => {
-  const dummyData = [
-    {
-      id: 1,
-      currency: "BTC",
-      price: "67 432",
-      change: "5"
-    },
-    {
-      id: 2,
-      currency: "BTC",
-      price: "67 432",
-      change: "5"
-    },
-    {
-      id: 3,
-      currency: "BTC",
-      price: "67 432",
-      change: "5"
-    }
-  ]
-
   const [top10CryptoData, setTop10CryptoData] = useState([])
 
   const getCryptoData = async () => {
