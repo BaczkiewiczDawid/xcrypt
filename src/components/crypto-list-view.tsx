@@ -1,6 +1,9 @@
+"use client"
+
 import {Table, TableBody, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Cell} from "@/components/table/cell";
 import {dataFormatter} from "@/helpers/data-formatter";
+import {useEffect, useState} from "react";
 
 export const CryptoListView = () => {
   const dummyData = [
@@ -24,9 +27,35 @@ export const CryptoListView = () => {
     }
   ]
 
+  const [top10CryptoData, setTop10CryptoData] = useState([])
+
+  const getCryptoData = async () => {
+    try {
+      const response = await fetch("https://api.binance.com/api/v3/ticker/24hr")
+      const data = await response.json()
+
+      const top10Currencies = data.filter((item) => item.symbol.includes("USDT")).slice(0, 10)
+
+      return top10Currencies
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getCryptoData()
+      setTop10CryptoData(data)
+    }
+
+    fetchData()
+  }, []);
+
+  console.log(top10CryptoData)
+
   return (
     <div>
-      <h1 className={"font-medium"}>Explore top currencies</h1>
+      <h1 className={"font-bold"}>Explore top currencies</h1>
       <div className={"mt-4"}>
         <Table>
           <TableHeader>
@@ -38,13 +67,13 @@ export const CryptoListView = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {dummyData.map((data) => {
+            {top10CryptoData.map((data, index) => {
               return (
-                <TableRow key={data.id} className={"hover:bg-gray-100"}>
-                  <Cell>{data.id}</Cell>
-                  <Cell>{data.currency}</Cell>
-                  <Cell>{dataFormatter(data.price, "money")}</Cell>
-                  <Cell>{dataFormatter(data.change, "percent")}</Cell>
+                <TableRow key={index} className={"hover:bg-gray-100"}>
+                  <Cell>{index + 1}</Cell>
+                  <Cell>{data.symbol.replace("USDT", "")}</Cell>
+                  <Cell>{dataFormatter(data.askPrice, "money")}</Cell>
+                  <Cell>{dataFormatter(data.priceChangePercent, "percent")}</Cell>
                 </TableRow>
               )
             })}
