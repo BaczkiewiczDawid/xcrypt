@@ -38,6 +38,18 @@ export const CryptoListView = () => {
 
   console.log(currentPage)
 
+  const changeCurrentPage = (direction) => {
+    if (direction === "next") {
+      setCurrentPage((prev) => prev + 1)
+    } else if (direction === "prev") {
+      if (currentPage === 1) return
+
+      setCurrentPage((prev) => prev - 1)
+    } else {
+      return
+    }
+  }
+
   return (
     <div>
       <h1 className={"font-bold"}>Explore top currencies</h1>
@@ -55,7 +67,7 @@ export const CryptoListView = () => {
             {top10CryptoData.map((data, index) => {
               return (
                 <TableRow key={index} className={"hover:bg-gray-100"}>
-                  <Cell>{index + 1}</Cell>
+                  <Cell>{(currentPage - 1) * pageSize + index + 1}</Cell>
                   <Cell>{data.symbol.replace("USDT", "")}</Cell>
                   <Cell>{dataFormatter(data.askPrice, "money")}</Cell>
                   <Cell>{dataFormatter(data.priceChangePercent, "percent")}</Cell>
@@ -67,7 +79,7 @@ export const CryptoListView = () => {
         <div className={"mt-4"}>
           <Pagination className={"flex justify-end"}>
             <PaginationContent>
-              <PaginationItem className={"cursor-pointer"} onClick={() => setCurrentPage((prev) => prev - 1)}>
+              <PaginationItem className={"cursor-pointer"} onClick={() => changeCurrentPage("prev")}>
                 <PaginationPrevious className={"hover:bg-transparent hover:text-foreground"}/>
               </PaginationItem>
               <div className={"hidden"}>
@@ -86,7 +98,7 @@ export const CryptoListView = () => {
                   <PaginationEllipsis/>
                 </PaginationItem>
               </div>
-              <PaginationItem className={"cursor-pointer"} onClick={() => setCurrentPage((prev) => prev + 1)}>
+              <PaginationItem className={"cursor-pointer"} onClick={() => changeCurrentPage("next")}>
                 <PaginationNext className={"hover:bg-transparent hover:text-foreground"}/>
               </PaginationItem>
             </PaginationContent>
