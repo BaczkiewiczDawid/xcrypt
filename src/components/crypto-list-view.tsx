@@ -11,32 +11,27 @@ import {
   PaginationLink, PaginationNext,
   PaginationPrevious
 } from "@/components/ui/pagination";
+import {getData} from "@/helpers/getData";
 
 export const CryptoListView = () => {
   const [top10CryptoData, setTop10CryptoData] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const pageSize = 10
 
-  const getCryptoData = async () => {
-    try {
-      const response = await fetch(`/api/top-x-crypto?currentPage=${currentPage}&pageSize=${pageSize}`)
-
-      return response.json()
-    } catch (error) {
-      console.error(error)
-    }
+  const options = {
+    currentPage: currentPage,
+    pageSize: pageSize,
   }
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getCryptoData()
+      const data = await getData("/api/top-x-crypto", options)
+
       setTop10CryptoData(data.data)
     }
 
     fetchData()
   }, [currentPage]);
-
-  console.log(currentPage)
 
   const changeCurrentPage = (direction) => {
     if (direction === "next") {
@@ -69,7 +64,7 @@ export const CryptoListView = () => {
                 <TableRow key={index} className={"hover:bg-gray-100"}>
                   <Cell>{(currentPage - 1) * pageSize + index + 1}</Cell>
                   <Cell>{data.symbol.replace("USDT", "")}</Cell>
-                  <Cell>{dataFormatter(data.askPrice, "money")}</Cell>
+                  <Cell>{dataFormatter(data.lastPrice, "money")}</Cell>
                   <Cell>{dataFormatter(data.priceChangePercent, "percent")}</Cell>
                 </TableRow>
               )
