@@ -4,18 +4,24 @@ import {Table, TableBody, TableHead, TableHeader, TableRow} from "@/components/u
 import {Cell} from "@/components/table/cell";
 import {dataFormatter} from "@/helpers/data-formatter";
 import {useEffect, useState} from "react";
+import {
+  Pagination,
+  PaginationContent, PaginationEllipsis,
+  PaginationItem,
+  PaginationLink, PaginationNext,
+  PaginationPrevious
+} from "@/components/ui/pagination";
 
 export const CryptoListView = () => {
   const [top10CryptoData, setTop10CryptoData] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const pageSize = 10
 
   const getCryptoData = async () => {
     try {
-      const response = await fetch("https://api.binance.com/api/v3/ticker/24hr")
-      const data = await response.json()
+      const response = await fetch(`/api/top-x-crypto?currentPage=${currentPage}&pageSize=${pageSize}`)
 
-      const top10Currencies = data.filter((item) => item.symbol.includes("USDT")).slice(0, 10)
-
-      return top10Currencies
+      return response.json()
     } catch (error) {
       console.error(error)
     }
@@ -24,13 +30,13 @@ export const CryptoListView = () => {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getCryptoData()
-      setTop10CryptoData(data)
+      setTop10CryptoData(data.data)
     }
 
     fetchData()
-  }, []);
+  }, [currentPage]);
 
-  console.log(top10CryptoData)
+  console.log(currentPage)
 
   return (
     <div>
@@ -58,6 +64,34 @@ export const CryptoListView = () => {
             })}
           </TableBody>
         </Table>
+        <div className={"mt-4"}>
+          <Pagination className={"flex justify-end"}>
+            <PaginationContent>
+              <PaginationItem className={"cursor-pointer"} onClick={() => setCurrentPage((prev) => prev - 1)}>
+                <PaginationPrevious className={"hover:bg-transparent hover:text-foreground"}/>
+              </PaginationItem>
+              <div className={"hidden"}>
+                <PaginationItem>
+                  <PaginationLink href="#">1</PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#" isActive>
+                    2
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#">3</PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationEllipsis/>
+                </PaginationItem>
+              </div>
+              <PaginationItem className={"cursor-pointer"} onClick={() => setCurrentPage((prev) => prev + 1)}>
+                <PaginationNext className={"hover:bg-transparent hover:text-foreground"}/>
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
       </div>
     </div>
   )
