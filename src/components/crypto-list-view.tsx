@@ -12,6 +12,7 @@ import {
   PaginationPrevious
 } from "@/components/ui/pagination";
 import {getData} from "@/helpers/getData";
+import {TableLoader} from "@/components/loaders/table-loader";
 
 export const CryptoListView = () => {
   const [top10CryptoData, setTop10CryptoData] = useState([])
@@ -49,28 +50,31 @@ export const CryptoListView = () => {
     <div>
       <h1 className={"font-bold"}>Explore top currencies</h1>
       <div className={"mt-4"}>
-        <Table>
-          <TableHeader>
-            <TableRow className={"hover:bg-transparent"}>
-              <TableHead className={"text-black"}>#</TableHead>
-              <TableHead className={"text-black"}>Currency</TableHead>
-              <TableHead className={"text-black"}>Price</TableHead>
-              <TableHead className={"text-black"}>Change</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {top10CryptoData.map((data, index) => {
-              return (
-                <TableRow key={index} className={"hover:bg-gray-100"}>
-                  <Cell>{(currentPage - 1) * pageSize + index + 1}</Cell>
-                  <Cell>{data.symbol.replace("USDT", "")}</Cell>
-                  <Cell>{dataFormatter(data.lastPrice, "money")}</Cell>
-                  <Cell>{dataFormatter(data.priceChangePercent, "percent")}</Cell>
-                </TableRow>
-              )
-            })}
-          </TableBody>
-        </Table>
+        {top10CryptoData.length === 0 ? <TableLoader/> :
+          <Table>
+            <TableHeader>
+              <TableRow className={"hover:bg-transparent"}>
+                <TableHead className={"text-black"}>#</TableHead>
+                <TableHead className={"text-black"}>Currency</TableHead>
+                <TableHead className={"text-black"}>Price</TableHead>
+                <TableHead className={"text-black"}>Change</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {top10CryptoData.map((data, index) => {
+                return (
+                  <TableRow key={index} className={"hover:bg-gray-100"}>
+                    <Cell>{(currentPage - 1) * pageSize + index + 1}</Cell>
+                    <Cell>{data.symbol.replace("USDT", "")}</Cell>
+                    <Cell>{dataFormatter(data.lastPrice, "money")}</Cell>
+                    <Cell>{dataFormatter(data.priceChangePercent, "percent")}</Cell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>}
+
+
         <div className={"mt-4"}>
           <Pagination className={"flex justify-end"}>
             <PaginationContent>
