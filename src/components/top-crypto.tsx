@@ -4,7 +4,6 @@ import {Props} from "next/script";
 import {useEffect, useState} from "react";
 import {getData} from "@/helpers/getData";
 import {dataFormatter} from "@/helpers/data-formatter";
-import {Skeleton} from "@/components/ui/skeleton";
 import {ModalLoader} from "@/components/loaders/modal-loader";
 
 type Props = {
