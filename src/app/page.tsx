@@ -3,6 +3,7 @@ import safetyBoxImg from "@/assets/images/safety-box.png"
 import {Button} from "@/components/ui/button";
 import type {StaticImport} from 'next/dist/shared/lib/get-img-props';
 import {CryptoListView} from "@/components/crypto-list-view";
+import {TopCrypto} from "@/components/top-crypto";
 
 export default function Home() {
   return (
@@ -22,6 +23,10 @@ export default function Home() {
       </div>
       <div className={"mt-12"}>
         <CryptoListView/>
+        <div className={"mt-8 flex flex-col gap-y-4"}>
+          <TopCrypto type={"win"}/>
+          <TopCrypto type={"loss"}/>
+        </div>
       </div>
     </div>
   );
