@@ -13,9 +13,10 @@ import {
 } from "@/components/ui/pagination";
 import {getData} from "@/helpers/getData";
 import {TableLoader} from "@/components/loaders/table-loader";
+import {CryptoData} from "@/types/crypto-data";
 
 export const CryptoListView = () => {
-  const [top10CryptoData, setTop10CryptoData] = useState([])
+  const [top10CryptoData, setTop10CryptoData] = useState<CryptoData[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const pageSize = 10
 
@@ -34,7 +35,7 @@ export const CryptoListView = () => {
     fetchData()
   }, [currentPage]);
 
-  const changeCurrentPage = (direction) => {
+  const changeCurrentPage = (direction: "next" | "prev") => {
     if (direction === "next") {
       setCurrentPage((prev) => prev + 1)
     } else if (direction === "prev") {
