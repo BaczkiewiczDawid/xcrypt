@@ -3,6 +3,7 @@
 import {useEffect, useState} from "react";
 import {CandlestickChart} from "@/components/charts/candlestick-chart";
 import {getData} from "@/helpers/getData";
+import {Combobox} from "@/components/combobox";
 
 type ChartData = {
     data: {
@@ -13,16 +14,17 @@ type ChartData = {
 
 export default function Analytics() {
     const [data, setData] = useState([])
+    const [selectedPair, setSelectedPair] = useState("BTCUSDT");
 
     useEffect(() => {
         const fetchData = async () => {
-            const options = {pair: "BTCUSDT", interval: "4h"};
+            const options = {pair: selectedPair, interval: "4h"};
             const data = await getData("/api/single-crypto", options);
             setData(data.data);
         };
 
         fetchData();
-    }, []);
+    }, [selectedPair]);
 
     const [series, setSeries] = useState<ChartData[]>([]);
 
@@ -39,12 +41,26 @@ export default function Analytics() {
         ]);
     }, [data]);
 
+    const pairsList = [
+        {
+            label: 'BTC / USDT',
+            value: 'BTCUSDT'
+        },
+        {
+            label: 'ETH / USDT',
+            value: 'ETHUSDT'
+        },
+        {
+            label: 'BNB / USDT',
+            value: 'BNBUSDT'
+        }
+    ]
 
     return (
         <div>
-            <h1>Analytics</h1>
+            <Combobox value={selectedPair} setValue={setSelectedPair} options={pairsList}/>
             {series.length > 0 &&
-                <CandlestickChart chartData={series} title={"BTC / USDT"}/>
+                <CandlestickChart chartData={series} title={selectedPair}/>
             }
         </div>
     );
