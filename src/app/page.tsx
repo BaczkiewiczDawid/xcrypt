@@ -4,6 +4,7 @@ import {Button} from "@/components/ui/button";
 import type {StaticImport} from 'next/dist/shared/lib/get-img-props';
 import {CryptoListView} from "@/components/crypto-list-view";
 import {TopCrypto} from "@/components/top-crypto";
+import Link from "next/link";
 
 export default function Home() {
     return (
@@ -16,14 +17,19 @@ export default function Home() {
                         <p className={"mt-4 md:text-lg"}>For selected cryptocurrency pairs, manage Your portfolio, all
                             in one
                             app</p>
-                        <Button
-                            className={"mt-4 hidden px-8 text-xl font-medium hover:bg-amber-400 lg:block"}>Explore</Button>
+                        <Link href={"/analytics"}>
+                            <Button
+                                className={"mt-4 hidden px-8 text-xl font-medium hover:bg-amber-400 lg:block"}>Explore</Button>
+                        </Link>
 
                     </div>
                     <Image src={safetyBoxImg as StaticImport} alt={"safe"} className={"m-auto w-3/4 md:w-1/3"}/>
                 </div>
                 <div>
-                    <Button className={"mt-10 px-10 py-6 text-xl font-medium lg:hidden"}>Explore</Button>
+                    <Link href={"/analytics"}>
+                        <Button className={"mt-10 px-10 py-6 text-xl font-medium lg:hidden"}>Explore</Button>
+
+                    </Link>
                 </div>
             </div>
             <div className={"mt-12"}>
