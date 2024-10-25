@@ -43,7 +43,9 @@ export default function Analytics() {
     return (
         <div>
             <h1>Analytics</h1>
-            {series && <CandlestickChart chartData={series} title={"BTC / USDT"}/>}
+            {series.length > 0 &&
+                <CandlestickChart chartData={series} title={"BTC / USDT"}/>
+            }
         </div>
     );
 }
