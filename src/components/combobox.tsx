@@ -24,18 +24,18 @@ export const Combobox = ({value, setValue, options}: Props) => {
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-auto justify-between"
+                    className="hover:text-secondary w-auto justify-between text-xs hover:bg-white p-2"
                 >
                     <>
                         {value
                             ? options.find((option) => option.value === value)?.label
                             : "Select pair"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50"/></>
+                        <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50"/></>
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
+            <PopoverContent className="text-secondary w-auto bg-white p-0 text-xs">
                 <Command>
-                    <CommandInput/>
+                    <CommandInput className={"text-secondary bg-white p-2"} placeholder={"Search pair..."}/>
                     <CommandList>
                         <CommandGroup>
                             {options.map((option) => (
@@ -46,7 +46,7 @@ export const Combobox = ({value, setValue, options}: Props) => {
                                         setValue(currentValue === value ? "" : currentValue)
                                         setOpen(false)
                                     }}
-                                    className={"px-4 py-2 flex items-center justify-between text-sm cursor-pointer"}
+                                    className={"flex cursor-pointer items-center justify-between px-4 py-2 text-xs hover:bg-gray-200"}
                                 >
                                     {option.label}
                                     <Check

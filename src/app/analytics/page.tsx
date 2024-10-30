@@ -59,9 +59,11 @@ export default function Analytics() {
     return (
         <div>
             <Combobox value={selectedPair} setValue={setSelectedPair} options={pairsList}/>
-            {series.length > 0 &&
-                <CandlestickChart chartData={series} title={selectedPair}/>
-            }
+            <div className={"mt-12"}>
+                {series.length > 0 &&
+                    <CandlestickChart chartData={series} title={selectedPair}/>
+                }
+            </div>
         </div>
     );
 }
