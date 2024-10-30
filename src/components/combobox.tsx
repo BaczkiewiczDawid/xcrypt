@@ -37,7 +37,7 @@ export const Combobox = ({value, setValue, options}: Props) => {
                 <Command>
                     <CommandInput className={"text-secondary bg-white p-2"} placeholder={"Search pair..."}/>
                     <CommandList>
-                        <CommandGroup>
+                        <CommandGroup className={"max-h-48 overflow-y-auto"}>
                             {options.map((option) => (
                                 <CommandItem
                                     key={option.value}

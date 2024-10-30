@@ -15,12 +15,36 @@ type ChartData = {
 export default function Analytics() {
     const [data, setData] = useState([])
     const [selectedPair, setSelectedPair] = useState("BTCUSDT");
+    const [pairsList, setPairsList] = useState([{
+        label: 'BTC / USDT',
+        value: 'BTCUSDT'
+    },
+        {
+            label: 'ETH / USDT',
+            value: 'ETHUSDT'
+        },
+        {
+            label: 'BNB / USDT',
+            value: 'BNBUSDT'
+        }])
 
     useEffect(() => {
         const fetchData = async () => {
             const options = {pair: selectedPair, interval: "4h"};
             const data = await getData("/api/single-crypto", options);
+            const pairsData = await getData("/api/pairs")
+
+            // TODO: dynamically load pairs list
+
+            const formattedPairsData = pairsData.map((pair: string) => {
+                return {
+                    label: pair.includes("USDT") ? pair.split("USDT")[0] + " / USDT" : pair,
+                    value: pair
+                }
+            })
+
             setData(data.data);
+            setPairsList(formattedPairsData)
         };
 
         fetchData();
@@ -40,21 +64,6 @@ export default function Analytics() {
             }
         ]);
     }, [data]);
-
-    const pairsList = [
-        {
-            label: 'BTC / USDT',
-            value: 'BTCUSDT'
-        },
-        {
-            label: 'ETH / USDT',
-            value: 'ETHUSDT'
-        },
-        {
-            label: 'BNB / USDT',
-            value: 'BNBUSDT'
-        }
-    ]
 
     return (
         <div>
