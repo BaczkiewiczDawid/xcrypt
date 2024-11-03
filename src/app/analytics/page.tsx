@@ -4,7 +4,6 @@ import {useEffect, useState} from "react";
 import {CandlestickChart} from "@/components/charts/candlestick-chart";
 import {getData} from "@/helpers/getData";
 import {Combobox} from "@/components/combobox";
-import {Bookmark} from "lucide-react";
 import {Bookmarks} from "@/components/bookmarks";
 
 type ChartData = {

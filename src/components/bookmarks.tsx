@@ -1,9 +1,16 @@
-import {Bookmark} from "lucide-react";
 import {useEffect, useState} from "react";
+import {BookmarkIcon} from "@heroicons/react/24/outline";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {Button} from "@/components/ui/button";
 
 type Props = {
-    selectedPair: string
-}
+    selectedPair: string;
+};
 
 export const Bookmarks = ({selectedPair}: Props) => {
     const [bookmarks, setBookmarks] = useState<string[]>([]);
@@ -20,14 +27,27 @@ export const Bookmarks = ({selectedPair}: Props) => {
         }
 
         localStorage.setItem("bookmarks", JSON.stringify(updatedBookmarks));
-    }
+        setBookmarks(updatedBookmarks);
+    };
 
     useEffect(() => {
-        const currentBookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
+        const savedBookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
+        setBookmarks(savedBookmarks);
+    }, [])
 
-        setBookmarks(currentBookmarks);
-    }, [selectedPair, addToBookmarks]);
-
-    return <Bookmark className={`cursor-pointer ${bookmarks.includes(selectedPair) && "bg-amber-400"}`}
-                     onClick={addToBookmarks}/>
-}
+    return (
+        <TooltipProvider delayDuration={300}>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <BookmarkIcon
+                        className={`h-6 w-6 cursor-pointer ${bookmarks.includes(selectedPair) && "fill-primary"}`}
+                        onClick={addToBookmarks}
+                    />
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p className={"text-xsm"}>{bookmarks.includes(selectedPair) ? "Remove from bookmarks!" : "Add to bookmarks!"}</p>
+                </TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
+    );
+};
