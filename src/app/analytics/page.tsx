@@ -16,24 +16,15 @@ type ChartData = {
 export default function Analytics() {
     const [data, setData] = useState([])
     const [selectedPair, setSelectedPair] = useState("BTCUSDT");
-    const [pairsList, setPairsList] = useState([{
-        label: 'BTC / USDT',
-        value: 'BTCUSDT'
-    },
-        {
-            label: 'ETH / USDT',
-            value: 'ETHUSDT'
-        },
-        {
-            label: 'BNB / USDT',
-            value: 'BNBUSDT'
-        }])
+    const [pairsList, setPairsList] = useState([])
+    const [bookmarks, setBookmarks] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             const options = {pair: selectedPair, interval: "4h"};
+            const pairsDataOptions = {bookmarks: JSON.stringify(bookmarks)}
             const data = await getData("/api/single-crypto", options);
-            const pairsData = await getData("/api/pairs")
+            const pairsData = await getData("/api/pairs", pairsDataOptions)
 
             // TODO: dynamically load pairs list
 
@@ -49,7 +40,7 @@ export default function Analytics() {
         };
 
         fetchData();
-    }, [selectedPair]);
+    }, [selectedPair, bookmarks]);
 
     const [series, setSeries] = useState<ChartData[]>([]);
 
@@ -69,8 +60,8 @@ export default function Analytics() {
     return (
         <div>
             <div className={"flex items-center justify-between"}>
-                <Combobox value={selectedPair} setValue={setSelectedPair} options={pairsList}/>
-                <Bookmarks selectedPair={selectedPair}/>
+                <Combobox value={selectedPair} setValue={setSelectedPair} options={pairsList} bookmarks={bookmarks}/>
+                <Bookmarks selectedPair={selectedPair} bookmarks={bookmarks} setBookmarks={setBookmarks}/>
             </div>
             <div className={"mt-12"}>
                 {series.length > 0 &&

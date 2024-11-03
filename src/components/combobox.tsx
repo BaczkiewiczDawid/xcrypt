@@ -4,6 +4,7 @@ import {Command, CommandGroup, CommandInput, CommandItem, CommandList} from "cmd
 import {Check, ChevronsUpDown} from "lucide-react";
 import {SetStateAction, useState} from "react";
 import {cn} from "@/lib/utils";
+import {BookmarkIcon} from "@heroicons/react/24/outline";
 
 type Props = {
     value: string,
@@ -12,9 +13,10 @@ type Props = {
         label: string,
         value: string,
     }[]
+    bookmarks?: string[]
 }
 
-export const Combobox = ({value, setValue, options}: Props) => {
+export const Combobox = ({value, setValue, options, bookmarks}: Props) => {
     const [open, setOpen] = useState(false)
 
     return (
@@ -48,6 +50,9 @@ export const Combobox = ({value, setValue, options}: Props) => {
                                     }}
                                     className={"flex cursor-pointer items-center justify-between px-4 py-2 text-xs hover:bg-gray-200"}
                                 >
+                                    {bookmarks && bookmarks.includes(option.value) && (
+                                        <BookmarkIcon className={"h-6 w-6 fill-primary"}/>
+                                    )}
                                     {option.label}
                                     <Check
                                         className={cn(

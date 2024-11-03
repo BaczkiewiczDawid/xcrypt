@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {SetStateAction, useEffect, useState} from "react";
 import {BookmarkIcon} from "@heroicons/react/24/outline";
 import {
     Tooltip,
@@ -10,12 +10,14 @@ import {Button} from "@/components/ui/button";
 
 type Props = {
     selectedPair: string;
+    bookmarks: string[];
+    setBookmarks: React.Dispatch<SetStateAction<string[]>>;
 };
 
-export const Bookmarks = ({selectedPair}: Props) => {
-    const [bookmarks, setBookmarks] = useState<string[]>([]);
-
+export const Bookmarks = ({selectedPair, bookmarks, setBookmarks}: Props) => {
     const addToBookmarks = () => {
+        if (!window) return;
+
         const currentBookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
 
         let updatedBookmarks: string[];
@@ -31,6 +33,8 @@ export const Bookmarks = ({selectedPair}: Props) => {
     };
 
     useEffect(() => {
+        if (!window) return;
+
         const savedBookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
         setBookmarks(savedBookmarks);
     }, [])

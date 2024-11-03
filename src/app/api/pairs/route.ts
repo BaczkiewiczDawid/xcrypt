@@ -1,9 +1,11 @@
-import {NextResponse} from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 import {getPairs} from "@/app/api/interfaces/get-pairs";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
     try {
-        const response = await getPairs()
+        const searchParams = req.nextUrl.searchParams
+
+        const response = await getPairs(searchParams)
 
         return NextResponse.json(response)
     } catch (err) {
