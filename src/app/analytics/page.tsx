@@ -4,6 +4,8 @@ import {useEffect, useState} from "react";
 import {CandlestickChart} from "@/components/charts/candlestick-chart";
 import {getData} from "@/helpers/getData";
 import {Combobox} from "@/components/combobox";
+import {Bookmark} from "lucide-react";
+import {Bookmarks} from "@/components/bookmarks";
 
 type ChartData = {
     data: {
@@ -67,7 +69,10 @@ export default function Analytics() {
 
     return (
         <div>
-            <Combobox value={selectedPair} setValue={setSelectedPair} options={pairsList}/>
+            <div className={"flex items-center justify-between"}>
+                <Combobox value={selectedPair} setValue={setSelectedPair} options={pairsList}/>
+                <Bookmarks selectedPair={selectedPair}/>
+            </div>
             <div className={"mt-12"}>
                 {series.length > 0 &&
                     <CandlestickChart chartData={series} title={selectedPair}/>

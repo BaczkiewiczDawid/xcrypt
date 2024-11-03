@@ -16,7 +16,7 @@ export const getPairs = async () => {
             return 0
         })
 
-        return sortedPairs
+        return sortedPairs.slice(0, 100)
     } catch {
 
     }
