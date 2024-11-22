@@ -1,4 +1,4 @@
-type Format = "money" | "percent"
+export type Format = "money" | "percent"
 
 export const dataFormatter = (value: string | number, format: Format) => {
   switch (format) {

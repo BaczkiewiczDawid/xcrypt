@@ -5,6 +5,8 @@ import {CandlestickChart} from "@/components/charts/candlestick-chart";
 import {getData} from "@/helpers/getData";
 import {Combobox} from "@/components/combobox";
 import {Bookmarks} from "@/components/bookmarks";
+import {intervalsList} from "@/data/intervals";
+import {StatisticsTable} from "@/app/analytics/components/statistics-table";
 
 type ChartData = {
     data: {
@@ -18,10 +20,11 @@ export default function Analytics() {
     const [selectedPair, setSelectedPair] = useState("BTCUSDT");
     const [pairsList, setPairsList] = useState([])
     const [bookmarks, setBookmarks] = useState<string[]>([]);
+    const [interval, setInterval] = useState("4h");
 
     useEffect(() => {
         const fetchData = async () => {
-            const options = {pair: selectedPair, interval: "4h"};
+            const options = {pair: selectedPair, interval: interval};
             const pairsDataOptions = {bookmarks: JSON.stringify(bookmarks)}
             const data = await getData("/api/single-crypto", options);
             const pairsData = await getData("/api/pairs", pairsDataOptions)
@@ -40,7 +43,7 @@ export default function Analytics() {
         };
 
         fetchData();
-    }, [selectedPair, bookmarks]);
+    }, [selectedPair, bookmarks, interval]);
 
     const [series, setSeries] = useState<ChartData[]>([]);
 
@@ -60,13 +63,21 @@ export default function Analytics() {
     return (
         <div>
             <div className={"flex items-center justify-between"}>
-                <Combobox value={selectedPair} setValue={setSelectedPair} options={pairsList} bookmarks={bookmarks}/>
+                <div className={"flex gap-x-4"}>
+                    <Combobox value={selectedPair} setValue={setSelectedPair} options={pairsList}
+                              bookmarks={bookmarks} searchPlaceholder={"Select pair..."}/>
+                    <Combobox value={interval} setValue={setInterval} options={intervalsList}/>
+                </div>
                 <Bookmarks selectedPair={selectedPair} bookmarks={bookmarks} setBookmarks={setBookmarks}/>
             </div>
             <div className={"mt-12"}>
                 {series.length > 0 &&
                     <CandlestickChart chartData={series} title={selectedPair}/>
                 }
+            </div>
+            <div className={"mt-12"}>
+                <h1 className={"text-xl font-bold"}>Key stats</h1>
+                {data.length > 0 && <StatisticsTable data={data} interval={interval}/>}
             </div>
         </div>
     );
